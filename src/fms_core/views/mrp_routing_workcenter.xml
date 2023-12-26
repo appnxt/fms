@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="mrp_routing_workcenter_form_view" model="ir.ui.view">
+            <field name="name">mrp.routing.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+            <field name="model">mrp.routing.workcenter</field>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//field[@name='time_cycle']" position="after">
+                        <field name="outsourcing_product_id"/>
+                        <field name="outsourcing_partner_id"></field>
+                    </xpath>
+                    <xpath expr="//field[@name='name']" position="before">
+                        <field name="op_name_id"></field>
+                    </xpath>
+                    <xpath expr="//field[@name='name']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath> 
+                </data>  
+            </field>
+        </record>
+        <record id="mrp_routing_workcenter_bom_tree_view" model="ir.ui.view">
+            <field name="name">mrp.routing.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_routing_workcenter_bom_tree_view"/>
+            <field name="model">mrp.routing.workcenter</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='blocked_by_operation_ids']" position="after">
+                    <field name="outsourcing_product_id"/>
+                    <field name="outsourcing_partner_id"></field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

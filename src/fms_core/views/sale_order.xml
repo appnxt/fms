@@ -1,0 +1,65 @@
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_sale_material_qty" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.sale.stock.qty</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_cancel']" position="before">
+                    <button type="object" name="action_production_replenish" string="生产下单" attrs="{'invisible': [('state','not in',['sale','done'])]}"/>
+                    <button type="object" name="action_purchase_replenish" string="外协下单" attrs="{'invisible': [('is_outsourcing','=',False)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='sale_order_template_id']" position="after">
+                    <field name="is_outsourcing" />
+                </xpath>
+                <xpath expr="//page/field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                    <field name="drawing_no" />
+                    <field name="material_id" widget="sol_product_many2one"/>
+                    <field name="qty_material" />
+                    <field name="bom_id" optional="hide" domain="[('product_tmpl_id','=',product_template_id)]"/>
+                    <field name="qty_production" />
+                    <button name="action_show_bom_details" type="object" icon="fa-list" width="0.1" title="工艺设置"/>
+                </xpath>
+                <xpath expr="//page[@name='customer_signature']" position="after">
+                    <page name="outsource_ids" string="外协/包" attrs="{'invisible':[('is_outsourcing','=',False)]}">
+                        <field name="outsource_ids">
+                            <tree editable="bottom">
+                                <field name="sale_line_id" domain="[('order_id','=',parent.id)]"></field>
+                                <field name="vendor_id" required="1"></field>
+                                <field name="product_uom_qty"></field>
+                                <field name="outsource_type"></field>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//page[@name='customer_signature']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>                
+            </field>
+        </record>
+    <record id="sale_order_inherited_form_purchase" model="ir.ui.view">
+        <field name="name">sale.order.inherited.form.purchase</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_mrp_production_orders" type="object" icon="fa-wrench" groups='base.group_user' attrs="{'invisible': [('fms_mrp_production_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="fms_mrp_production_count"/></span>
+                        <span class="o_stat_text">Production</span>
+                    </div>
+                </button>
+            </xpath>         
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_view_purchase_orders_fms" type="object" icon="fa-credit-card" groups='base.group_user' attrs="{'invisible': [('fms_purchase_order_count', '=', 0)]}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="fms_purchase_order_count"/></span>
+                        <span class="o_stat_text">Purchase</span>
+                    </div>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</odoo>

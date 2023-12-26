@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+<!-- <template id="listing">
+    <t t-name="fms_core.DrawingCode" t-extend="sale_product_configurator.configure_optional_products">
+        <t t-jquery="tr.o_total_row" t-operation="replace">
+            <tr class="o_total_row">
+                <td t-if="not product_variant.default_code">图号: <input type="text" class="product_code" t-att-value="product_variant.default_code"/></td> 
+                <td colspan="4" class="text-end">
+                    <strong>Total2222:</strong>
+                    <span class="js_price_total fw-bold" style="white-space: nowrap;"
+                        t-att-data-product-id="product.id"
+                        t-out="combination_info['price'] * (add_qty or 1)"
+                        t-options='{
+                            "widget": "monetary",
+                            "display_currency": (pricelist or product).currency_id
+                        }'/>
+                </td>
+            </tr>
+        </t>
+    </t>
+</template> -->
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+"id","sequence","name","state","model_id","binding_model_id","usage","code","groups_id/id"
+"ir_act_server_21","5","开票","Execute Python Code","stock.move","stock.move","Server Action","
+records.create_invoices()
+","account.group_account_invoice"

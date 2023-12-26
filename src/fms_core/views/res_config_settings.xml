@@ -1,0 +1,32 @@
+<odoo>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.base.setup</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="0"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='about']" position="replace">
+                        <div id='about'>
+                            <h2>关于</h2>
+                            <div class="row mt16 o_settings_container" name="about_setting_container">
+                                <div class='col-12 col-lg-6 o_setting_box' id='appstore'>
+                                    <div class="d-flex">
+                                        <div class="o_setting_right_pane">
+                                            <!-- FIXME Those links are defined directly in the template which means that we will have to
+                                            update the template code is the link ever changes -->
+                                            <a class="d-block mx-auto" href="https://www.appnxt.com" target="blank">
+                                                <img alt="Panlu" class="d-block mx-auto img img-fluid" src="https://www.appnxt.com/assets/images/brands/panluwl.svg"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    FMS 16.0.1
+                                </div>
+                            </div>
+                        </div>
+                </xpath>
+            </field>
+        </record>
+</odoo>

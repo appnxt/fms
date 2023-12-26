@@ -1,0 +1,10 @@
+@media (min-width: 768px) {
+    .o_navbar_apps_menu .dropdown-menu-custom .o_app {
+        width: 25%;
+    }
+}
+@media (max-width: 600px) {
+    .o_navbar_apps_menu .dropdown-menu-custom .o_app {
+        width: 50%;
+    }
+}

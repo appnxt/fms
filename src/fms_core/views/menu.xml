@@ -1,0 +1,208 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="base.main_company" model="res.company">
+      <field name="favicon" type="base64" file="fms_menu/static/src/img/favicon.ico" />
+    </record>
+
+    <record id="action_quotations_with_onboarding" model="ir.actions.act_window">
+        <field name="name">Quotations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="context">{'search_default_draft': 1}</field>
+        <field name="domain">[('state','not in',['sale','done'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Create a new quotation, the first step of a new sale!
+            </p><p>
+            Once the quotation is confirmed by the customer, it becomes a sales order.<br/> You will be able to create an invoice and collect the payment.
+            </p>
+        </field>
+    </record>
+
+    <record model='ir.actions.act_url' id='action_my_portal'>
+        <field name='name'>门户</field>
+        <field name='url'>/my</field>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="OTC" sequence="0" id="menu_fms_order" web_icon="sale_management,static/description/icon.svg"/>
+    <menuitem name="人员" sequence="1" id="menu_fms_manpower" web_icon="hr,static/description/icon.svg"/>
+    <menuitem name="设备" sequence="2" id="menu_fms_machine" web_icon="maintenance,static/description/icon.svg"/>
+    <menuitem name="物料" sequence="3" id="menu_fms_material" web_icon="stock,static/description/icon.svg"/>
+    <menuitem name="图纸" sequence="4" id="menu_fms_method" web_icon="dms,static/description/icon.png"/>
+    <menuitem name="环境" sequence="5" id="menu_fms_environment" web_icon="base,static/description/settings.png"/>
+    <menuitem name="测量" sequence="6" id="menu_fms_measure" web_icon="quality_control_oca,static/description/icon.png"/>
+    <menuitem name="沟通" sequence="7" id="menu_fms_discuss" action="mail.action_discuss" web_icon="mail,static/description/icon.svg">
+        <menuitem
+            id="fms_my_portal"
+            name="门户"
+            action="action_my_portal"
+            sequence="10"/>
+    </menuitem>
+
+    <!-- menu categories OTC -->
+    <menuitem name="订单" sequence="2" id="fms_menu_sale" parent="menu_fms_order" groups="sales_team.group_sale_salesman">
+        <menuitem name="报价单" sequence="1" id="action_quotations" action="action_quotations_with_onboarding"/>
+        <menuitem name="销售订单" sequence="2" id="sale_order" action="sale.action_orders"/>
+        <menuitem name="订单待开票" sequence="4" id="menu_sale_order_invoice"
+                action="sale.action_orders_to_invoice"/>
+        <menuitem name="发货待开票" sequence="4" id="menu_sale_stock_invoice"
+              action="fms_core.stock_move_action"/>
+        <menuitem name="客户" id="otc_sale_5" action="account.res_partner_action_customer"/>
+
+    </menuitem>
+    <menuitem name="采购" sequence="3" id="fms_menu_purchase" parent="menu_fms_order" groups="purchase.group_purchase_user">
+        <menuitem name="询价单" id="purchase_rfq"
+                action="purchase.purchase_rfq"/>
+        <menuitem name="采购单" id="purchase_form_action"
+                action="purchase.purchase_form_action"/>     
+        <menuitem name="供应商" id="otc_purchase_3" action="account.res_partner_action_supplier"/>
+    </menuitem>
+    <menuitem name="生产" sequence="4" id="fms_menu_manufacturing" parent="menu_fms_order" groups="mrp.group_mrp_user">
+        <menuitem name="生产订单" id="mrp_production_action"
+                action="mrp.mrp_production_action"/>
+        <menuitem name="工序工单" id="mrp_workorder_todo"
+                action="mrp.mrp_workorder_todo"/>     
+        <menuitem name="生产报表" id="mrp_production_report"
+                action="mrp.mrp_production_report"/>    
+    </menuitem>
+    <menuitem name="物流" sequence="5" id="stock_picking_type_out" parent="menu_fms_order" groups="stock.group_stock_user">
+        <menuitem name="出入库" sequence="1" id="stock_picking_type_in_out" action="stock.stock_picking_type_action"/>  
+    </menuitem>
+    <menuitem name="收款" sequence="6" id="fms_menu_invoice" parent="menu_fms_order" groups="account.group_account_invoice">
+        <menuitem
+            name="销售发票"
+            id="action_move_out_invoice_type"
+            action="account.action_move_out_invoice_type"
+        /> 
+        <menuitem
+            name="销售红字发票"
+            id="action_move_out_refund_type"
+            action="account.action_move_out_refund_type"
+        />         
+        <menuitem
+            name="采购发票"
+            id="action_move_in_invoice_type"
+            action="account.action_move_in_invoice_type"
+        /> 
+        <menuitem
+            name="采购红字发票"
+            id="action_move_in_refund_type"
+            action="account.action_move_in_refund_type"
+        /> 
+    </menuitem>
+
+    <!-- 人                      -->
+    <menuitem name="客户" id="fms_menu_customers" parent="menu_fms_manpower" action="account.res_partner_action_customer" groups="sales_team.group_sale_salesman"/>
+    <menuitem name="供应商" id="fms_menu_vendors" parent="menu_fms_manpower" action="account.res_partner_action_supplier" groups="purchase.group_purchase_user"/>
+    <menuitem name="员工" id="fms_menu_employees" parent="menu_fms_manpower" action="hr.open_view_employee_list_my" groups="base.group_user"/>
+    <menuitem name="用户" id="fms_menu_users" parent="menu_fms_manpower" action="base.action_res_users" groups="base.group_erp_manager"/>
+
+    <!-- 设备                      -->      
+    <menuitem name="设备" sequence="1" id="fms_menu_hr_equipment" parent="menu_fms_machine" action="maintenance.hr_equipment_action" groups="maintenance.group_equipment_manager"/>
+    <menuitem name="保养" sequence="2" id="fms_menu_maintenance" parent="menu_fms_machine" action="maintenance.hr_equipment_request_action" groups="maintenance.group_equipment_manager"/>
+    <menuitem name="工作中心" sequence="3" id="fms_menu_workcenters" parent="menu_fms_machine" action="mrp.mrp_workcenter_action" groups="maintenance.group_equipment_manager"/>
+    <menuitem name="配置" sequence="4" id="fms_menu_hr_equipment_config" parent="menu_fms_machine" groups="maintenance.group_equipment_manager">
+        <menuitem name="设备类别" id="hr_equipment_category_action"
+                action="maintenance.hr_equipment_category_action"/>      
+        <menuitem name="保养阶段" id="hr_equipment_stage_action"
+                action="maintenance.hr_equipment_stage_action"/> 
+        <menuitem name="活动类型" id="mail_activity_type_action_config_maintenance"
+                action="maintenance.mail_activity_type_action_config_maintenance"/>  
+    </menuitem>                 
+
+    <!-- 物料                      -->  
+    <menuitem name="概览" id="stock_picking_type_action" parent="menu_fms_material"
+              action="stock.stock_picking_type_action" sequence="0" groups="stock.group_stock_user"/>  
+    <menuitem name="物料" id="fms_menu_materials" parent="menu_fms_material" sequence="1" groups="stock.group_stock_user">
+        <menuitem name="产品" id="product_template_action_product"
+                  action="stock.product_template_action_product" sequence="1"/>   
+        <menuitem name="变体" id="stock_product_normal_action"
+                  action="stock.stock_product_normal_action" sequence="2"/> 
+        <!-- <menuitem name="批次/序列号" id="action_production_lot_form"
+                  action="stock.action_production_lot_form" sequence="3"/>  -->
+        <menuitem name="出入库" id="action_picking_tree_all"
+                  action="stock.action_picking_tree_all" sequence="12"/> 
+    </menuitem>
+
+    <menuitem name="盘点" id="fms_menu_inventory" parent="menu_fms_material" sequence="3" groups="stock.group_stock_user"/>
+        <menuitem id="menu_action_inventory_tree" name="盘点" parent="fms_menu_inventory" 
+                  action="stock.action_view_inventory_tree" sequence="1"/>
+                 
+    <menuitem name="报表" id="fms_menu_report" parent="menu_fms_material" sequence="4" groups="stock.group_stock_user"/>
+        <menuitem id="action_product_stock_view" name="库存" parent="fms_menu_report" 
+                  action="stock.action_product_stock_view" sequence="1"/>
+        <!-- <menuitem id="stock_move_action" name="移动" parent="fms_menu_report" 
+                  action="stock.stock_move_action" sequence="1"/> -->
+    <menuitem name="配置" id="fms_menu_category" parent="menu_fms_material" sequence="5" groups="stock.group_stock_user">
+        <menuitem name="物料分类" id="product_category_action_form" action="product.product_category_action_form" sequence="1"/>
+        <menuitem name="物料清单" id="mrp_bom_form_action" action="mrp.mrp_bom_form_action" sequence="2"/>              
+        <!-- <menuitem name="工序" id="operation_name_action" action="fms_core.operation_name_action" sequence="3"/>   -->
+        <menuitem name="工艺" id="mrp_routing_action" action="mrp.mrp_routing_action" sequence="4"/>  
+    </menuitem>
+              
+
+    <!-- 法则                      -->  
+    <menuitem id="action_dms_file" name="文档" parent="menu_fms_method" sequence="1" action="dms.action_dms_file" groups="dms.group_dms_user"/>
+    <menuitem id="action_dms_directory" name="目录" parent="menu_fms_method" sequence="2" action="dms.action_dms_directory" groups="dms.group_dms_user"/>
+
+    <!-- <menuitem id="mrp_bom_form_action" name="物料清单" parent="fms_menu_boms" sequence="10" action="mrp.mrp_bom_form_action" /> -->
+    <!-- <menuitem id="mrp_routing_action" name="工序" parent="fms_menu_operations" sequence="10" action="mrp.mrp_routing_action" /> -->
+
+    <!-- 环境                      --> 
+    <menuitem name="设置" sequence="1" id="fms_menu_configurations" parent="menu_fms_environment" action="base_setup.action_general_configuration" />
+    <menuitem name="权限" sequence="2" id="fms_menu_groups" parent="menu_fms_environment" />
+        <menuitem id="action_res_groups" name="角色" parent="fms_menu_groups" sequence="10" action="base_user_role.action_res_users_role_tree" />
+        <menuitem id="action_res_company_form" name="公司" parent="fms_menu_groups" sequence="10" action="base.action_res_company_form" />
+    <menuitem id="menu_translation" name="Translations" parent="menu_fms_environment" sequence="3" groups="base.group_user"/>
+        <menuitem action="base.res_lang_act_window" id="menu_res_lang_act_window" parent="menu_translation" sequence="1"/>
+        <menuitem id="base.menu_translation_app" name="Application Terms" parent="menu_translation" sequence="4" groups="base.group_user"/>
+        <menuitem id="base.menu_translation_export" name="Import / Export" parent="menu_translation" sequence="3" groups="base.group_user"/>
+    <menuitem id="base.menu_custom" name="Technical" parent="menu_fms_environment" sequence="110" groups="base.group_no_one"/>
+
+    <!-- 测量 -->
+    <menuitem name="质检" sequence="1" id="fms_menu_qc" parent="menu_fms_measure">
+        <menuitem
+            name="质检单"
+            id="qc_inspection_menu"
+            action="quality_control_oca.action_qc_inspection"
+        />        
+        <menuitem
+            name="质检项"
+            id="qc_inspection_lines_menu"
+            action="quality_control_oca.action_qc_inspection_line"
+        />
+    </menuitem>
+    <menuitem name="检测" sequence="2" id="fms_menu_qc_test" parent="menu_fms_measure">
+        <menuitem
+            name="检测分类"
+            id="qc_test_category_menu"
+            action="quality_control_oca.action_qc_test_category"
+            groups="quality_control_oca.group_quality_control_manager"
+            sequence="10"
+        />
+        <menuitem
+            name="检测项目"
+            id="qc_test_menu"
+            action="quality_control_oca.action_qc_test"
+            groups="quality_control_oca.group_quality_control_manager"
+            sequence="20"
+        /> 
+    </menuitem>
+    <menuitem name="配置" sequence="3" id="fms_menu_qc_config" parent="menu_fms_measure">
+        <menuitem
+            name="触发器"
+            id="qc_trigger_menu"
+            action="quality_control_oca.action_qc_trigger"
+            sequence="1"
+        /> 
+        <menuitem name="物料分类" id="fms_menu_qc_config_2" action="product.product_category_action_form" sequence="2"/>
+        <menuitem name="产品" id="fms_menu_qc_config_3" action="stock.product_template_action_product" sequence="3"/> 
+    </menuitem>
+  </data>
+</odoo>

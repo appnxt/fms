@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="mrp_production_form_view" model="ir.ui.view">
+            <field name="name">mrp_production.scrap.qty</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="model">mrp.production</field>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='lot_producing_id']" position="before">
+                    <field name="qty_scrap"/>
+                    <field name="qty_planned"></field>
+                </xpath>
+            </field>
+        </record>
+        <!-- <record id="mrp_production_workorder_tree_view" model="ir.ui.view">
+            <field name="name">mrp.production.work.order.tree</field>
+            <field name="model">mrp.workorder</field>
+            <field name="mode">primary</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_editable_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="create">0</attribute>
+                    <attribute name="sample">1</attribute>
+                </xpath>
+                <field name="workcenter_id" position="after">
+                    <field name="production_id"/>
+                </field>
+                <field name="state" position="attributes">
+                    <attribute name="attrs">{'invisible': [('production_state', '=', 'draft')]}</attribute>
+                </field>
+            </field>
+        </record> -->
+    </data>
+</odoo>
